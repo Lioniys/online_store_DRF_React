@@ -1,7 +1,7 @@
 from django.contrib import admin
-import models
+from .models import Products, Categories, Brands
 
 
-admin.site.register(models.Products)
-admin.site.register(models.Categories)
-admin.site.register(models.Brands)
+admin.site.register(Products)
+admin.site.register(Categories)
+admin.site.register(Brands)

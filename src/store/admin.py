@@ -1,7 +1,13 @@
 from django.contrib import admin
-from .models import Products, Categories, Brands
+from .models import (
+    Product,
+    Category,
+    Brand,
+    ProductInfo,
+)
 
 
-admin.site.register(Products)
-admin.site.register(Categories)
-admin.site.register(Brands)
+admin.site.register(Product)
+admin.site.register(Category)
+admin.site.register(Brand)
+admin.site.register(ProductInfo)

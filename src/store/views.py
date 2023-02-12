@@ -1,10 +1,10 @@
-from rest_framework import viewsets
-from .models import Products
+from rest_framework import generics
+from .models import Product
 from .serializers import ProductsSerializer
 
 
-class ProductsViewSet(viewsets.ModelViewSet):
-    queryset = Products.objects.all()
+class ProductsListAPIView(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
     serializer_class = ProductsSerializer
 
 

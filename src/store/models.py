@@ -17,7 +17,7 @@ class Product(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='review')
-    parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
+    parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True, related_name='children')
     time_create = models.DateTimeField(auto_now_add=True)
     text = models.TextField(max_length=5000)
 

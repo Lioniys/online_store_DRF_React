@@ -1,9 +1,10 @@
 from rest_framework import generics
 from .permissions import IsAdminOrReadOnly
-from .models import Product
+from .models import Product, Review
 from .serializers import (
     ProductsListSerializer,
     ProductsDetailSerializer,
+    ReviewCreateSerializer,
 )
 
 
@@ -17,3 +18,8 @@ class ProductsDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductsDetailSerializer
     permission_classes = (IsAdminOrReadOnly,)
+
+
+class ReviewCreateView(generics.CreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewCreateSerializer

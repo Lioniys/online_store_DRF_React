@@ -2,15 +2,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from online_store import settings
-from store.views import ProductsListView, ProductsDetailView, ReviewCreateView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('products/', ProductsListView.as_view()),
-    path('products/<int:pk>/', ProductsDetailView.as_view()),
-    path('review/', ReviewCreateView.as_view()),
+    path('api/v1/', include('store.urls'))
 ]
 
 if settings.DEBUG:

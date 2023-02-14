@@ -31,6 +31,15 @@ class ReviewSerializer(serializers.ModelSerializer):
         exclude = ['product']
 
 
+class ReviewDetailSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(read_only=True)
+    children = RecursiveSerializer(many=True)
+
+    class Mata:
+        model = Review
+        fields = '__all__'
+
+
 class ProductsDetailSerializer(serializers.ModelSerializer):
     category = serializers.CharField(read_only=True)
     brand = serializers.CharField(read_only=True)

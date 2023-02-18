@@ -4,6 +4,7 @@ from store.views import (
     ProductsDetailView,
     ReviewCreateView,
     ReviewDetailView,
+    RatingCreateView,
 )
 
 
@@ -12,4 +13,5 @@ urlpatterns = [
     path('products/<int:pk>/', ProductsDetailView.as_view()),
     path('review/', ReviewCreateView.as_view()),
     path('review/<int:pk>/', ReviewDetailView.as_view()),
+    path('rating/', RatingCreateView.as_view()),
 ]

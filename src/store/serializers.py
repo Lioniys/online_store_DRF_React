@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Review
+from .models import Product, Review, RatingUserProduct
 
 
 class ProductsListSerializer(serializers.ModelSerializer):
@@ -55,4 +55,12 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
+        fields = '__all__'
+
+
+class RatingCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = RatingUserProduct
         fields = '__all__'

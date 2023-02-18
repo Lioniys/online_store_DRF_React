@@ -31,21 +31,37 @@ class ProductInfo(models.Model):
         return self.title
 
 
-class Rating(models.Model):
-    product = models.ForeignKey(Product, related_name='rating', on_delete=models.CASCADE)
-    one = models.PositiveIntegerField(default=0, null=True, blank=True)
-    two = models.PositiveIntegerField(default=0, null=True, blank=True)
-    three = models.PositiveIntegerField(default=0, null=True, blank=True)
-    four = models.PositiveIntegerField(default=0, null=True, blank=True)
-    five = models.PositiveIntegerField(default=0, null=True, blank=True)
-    counter = models.PositiveIntegerField(default=0, null=True, blank=True)
-    result = models.FloatField(default=0.0, null=True, blank=True)
+# class Rating(models.Model):
+#     product = models.ForeignKey(Product, related_name='rating', on_delete=models.CASCADE)
+#     one = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     two = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     three = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     four = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     five = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     counter = models.PositiveIntegerField(default=0, null=True, blank=True)
+#     result = models.FloatField(default=0.0, null=True, blank=True)
+
+
+class RatingStar(models.Model):
+    value = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.value}'
+
+
+class RatingProductStar(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0, null=True, blank=True)
 
 
 class RatingUserProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    rate = models.PositiveIntegerField(default=0, null=True, blank=True)
+    rate = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'user - {self.user} product - {self.product}'
 
 
 class Basket(models.Model):

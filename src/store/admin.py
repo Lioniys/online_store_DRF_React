@@ -7,6 +7,7 @@ from .models import (
     RatingStar,
     RatingUserProduct,
     RatingProductStar,
+    Basket,
 )
 
 
@@ -16,5 +17,7 @@ admin.site.register(Brand)
 admin.site.register(ProductInfo)
 admin.site.register(RatingStar)
 admin.site.register(RatingProductStar)
+admin.site.register(Basket)
+
 
 admin.site.register(RatingUserProduct)

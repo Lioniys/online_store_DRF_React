@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Review, RatingUserProduct
+from .models import Product, Review, RatingUserProduct, Basket
 
 
 class ProductsListSerializer(serializers.ModelSerializer):
@@ -63,4 +63,13 @@ class RatingCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RatingUserProduct
+        fields = '__all__'
+
+
+class BasketAddSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    basket_product = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+
+    class Meta:
+        model = Basket
         fields = '__all__'

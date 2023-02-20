@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from .services import get_rating_product
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from .models import Product, Review, RatingUserProduct, RatingProductStar, Basket
+from .models import Product, Review, RatingUserProduct, RatingProductStar, Basket, BasketProduct
 from .serializers import (
     ProductsListSerializer,
     ProductsDetailSerializer,
@@ -11,6 +11,8 @@ from .serializers import (
     ReviewDetailSerializer,
     RatingCreateSerializer,
     BasketAddSerializer,
+    BasketDetailSerializer,
+    BasketListSerializer,
 )
 
 
@@ -38,13 +40,26 @@ class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrReadOnly,)
 
 
-class BasketAddView(generics.ListAPIView):
-    serializer_class = BasketAddSerializer
+class BasketListView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         user = self.request.user
-        return Basket.objects.filter(user=user)
+        basket_obj, created = Basket.objects.get_or_create(user=user)
+        if self.request.method == 'POST':
+            return BasketProduct.objects.all()
+        return BasketProduct.objects.filter(basket=basket_obj)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return BasketAddSerializer
+        return BasketListSerializer
+
+
+class BasketDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BasketProduct.objects.all()
+    serializer_class = BasketDetailSerializer
+    permission_classes = (IsAuthenticated,)
 
 
 class RatingCreateView(generics.CreateAPIView):

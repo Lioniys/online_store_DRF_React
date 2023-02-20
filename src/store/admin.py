@@ -8,6 +8,7 @@ from .models import (
     RatingUserProduct,
     RatingProductStar,
     Basket,
+    BasketProduct,
 )
 
 
@@ -18,6 +19,5 @@ admin.site.register(ProductInfo)
 admin.site.register(RatingStar)
 admin.site.register(RatingProductStar)
 admin.site.register(Basket)
-
-
+admin.site.register(BasketProduct)
 admin.site.register(RatingUserProduct)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, Review, RatingUserProduct, Basket
+from .models import Product, Review, RatingUserProduct, Basket, BasketProduct
 
 
 class ProductsListSerializer(serializers.ModelSerializer):
@@ -66,10 +66,47 @@ class RatingCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BasketAddSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    basket_product = serializers.SlugRelatedField(many=True, read_only=True, slug_field='name')
+class ProductsBasketSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Basket
-        fields = '__all__'
+        model = Product
+        exclude = ['category', 'brand', 'rating', 'in_store']
+
+
+class BasketListSerializer(serializers.ModelSerializer):
+    product = ProductsBasketSerializer(read_only=True)
+
+    class Meta:
+        model = BasketProduct
+        exclude = ['basket']
+
+
+class BasketAddSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def create(self, validated_data):
+        user = validated_data.get('user')
+        product = validated_data.get('product')
+        count = validated_data.get('count')
+        basket = Basket.objects.get(user=user)
+        queryset = BasketProduct.objects.filter(basket=basket, product=product)
+        if queryset.exists():
+            raise serializers.ValidationError('Product already in cart')
+        return BasketProduct.objects.create(basket=basket, product=product, count=count)
+
+    class Meta:
+        model = BasketProduct
+        exclude = ['basket']
+
+
+class BasketDetailSerializer(serializers.ModelSerializer):
+
+    def update(self, instance, validated_data):
+        instance.product = validated_data.get('product', instance.product)
+        instance.count = validated_data.get('count', instance.count)
+        instance.save()
+        return instance
+
+    class Meta:
+        model = BasketProduct
+        exclude = ['basket']

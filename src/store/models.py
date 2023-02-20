@@ -22,10 +22,13 @@ class Review(models.Model):
     time_create = models.DateTimeField(auto_now_add=True)
     text = models.TextField(max_length=5000)
 
+    def __str__(self):
+        return f'user - {self.user} product - {self.product}'
+
 
 class ProductInfo(models.Model):
     title = models.CharField(max_length=250)
-    description = models.TextField()
+    description = models.TextField(max_length=5000)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='product_info')
 
     def __str__(self):
@@ -44,6 +47,9 @@ class RatingProductStar(models.Model):
     star = models.ForeignKey(RatingStar, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0, null=True, blank=True)
 
+    def __str__(self):
+        return f'product - {self.product} star - {self.star} count - {self.count}'
+
 
 class RatingUserProduct(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -56,7 +62,18 @@ class RatingUserProduct(models.Model):
 
 class Basket(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    basket_product = models.ManyToManyField('Product')
+
+    def __str__(self):
+        return f'user - {self.user}'
+
+
+class BasketProduct(models.Model):
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='basket_product')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0, null=True, blank=True)
+
+    def __str__(self):
+        return f'basket - {self.basket} product - {self.product} count - {self.count}'
 
 
 class Category(models.Model):

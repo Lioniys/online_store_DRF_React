@@ -1,9 +1,18 @@
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .services import get_rating_product
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from .models import Product, Review, RatingUserProduct, RatingProductStar, Basket, BasketProduct
+from .models import (
+    Product,
+    Review,
+    RatingUserProduct,
+    RatingProductStar,
+    Basket,
+    BasketProduct
+)
 from .serializers import (
     ProductsListSerializer,
     ProductsDetailSerializer,
@@ -17,13 +26,17 @@ from .serializers import (
 
 
 class ProductsListView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(in_store=True)
     serializer_class = ProductsListSerializer
     permission_classes = (IsAdminOrReadOnly,)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['category', 'brand']
+    search_fields = ['name']
+    ordering_fields = ['price']
 
 
 class ProductsDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(in_store=True)
     serializer_class = ProductsDetailSerializer
     permission_classes = (IsAdminOrReadOnly,)
 

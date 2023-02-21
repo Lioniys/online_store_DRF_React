@@ -35,7 +35,7 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
     user = serializers.CharField(read_only=True)
     children = RecursiveSerializer(many=True)
 
-    class Mata:
+    class Meta:
         model = Review
         fields = '__all__'
 

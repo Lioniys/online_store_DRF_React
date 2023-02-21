@@ -14,6 +14,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['id']
+
 
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -24,6 +27,9 @@ class Review(models.Model):
 
     def __str__(self):
         return f'user - {self.user} product - {self.product}'
+
+    class Meta:
+        ordering = ['id']
 
 
 class ProductInfo(models.Model):
@@ -74,6 +80,9 @@ class BasketProduct(models.Model):
 
     def __str__(self):
         return f'basket - {self.basket} product - {self.product} count - {self.count}'
+
+    class Meta:
+        ordering = ['id']
 
 
 class Category(models.Model):

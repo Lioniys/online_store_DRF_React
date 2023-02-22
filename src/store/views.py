@@ -3,13 +3,12 @@ from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .services import get_rating_product
+from .services import increment_counter_rating_product_star, save_rating_product
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import (
     Product,
     Review,
     RatingUserProduct,
-    RatingProductStar,
     Basket,
     BasketProduct
 )
@@ -26,6 +25,7 @@ from .serializers import (
 
 
 class ProductsListView(generics.ListCreateAPIView):
+    """Список товаров"""
     queryset = Product.objects.filter(in_store=True)
     serializer_class = ProductsListSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -36,29 +36,34 @@ class ProductsListView(generics.ListCreateAPIView):
 
 
 class ProductsDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Товар"""
     queryset = Product.objects.filter(in_store=True)
     serializer_class = ProductsDetailSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
 
 class ReviewCreateView(generics.CreateAPIView):
+    """Создание отзыва"""
     queryset = Review.objects.all()
     serializer_class = ReviewCreateSerializer
     permission_classes = (IsAuthenticated,)
 
 
 class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Отзыв"""
     queryset = Review.objects.all()
     serializer_class = ReviewDetailSerializer
     permission_classes = (IsOwnerOrReadOnly,)
 
 
 class BasketListView(generics.ListCreateAPIView):
+    """Список товаров в корзине пользователя"""
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         user = self.request.user
         basket_obj, created = Basket.objects.get_or_create(user=user)
+        # Создается корзина если её не было
         if self.request.method == 'POST':
             return BasketProduct.objects.all()
         return BasketProduct.objects.filter(basket=basket_obj)
@@ -70,12 +75,14 @@ class BasketListView(generics.ListCreateAPIView):
 
 
 class BasketDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Конкретный товар в корзине"""
     queryset = BasketProduct.objects.all()
     serializer_class = BasketDetailSerializer
     permission_classes = (IsAuthenticated,)
 
 
 class RatingCreateView(generics.CreateAPIView):
+    """Добавление оценки рейтинга"""
     queryset = RatingUserProduct.objects.all()
     serializer_class = RatingCreateSerializer
     permission_classes = (IsAuthenticated,)
@@ -83,19 +90,11 @@ class RatingCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         product = serializer.validated_data.get('product')
         star = serializer.validated_data.get('star')
-
-        queryset = RatingUserProduct.objects.filter(user=self.request.user, product=product)
+        user = self.request.user
+        # Проверка ставил ли пользователь уже оценку
+        queryset = RatingUserProduct.objects.filter(user=user, product=product)
         if queryset.exists():
             raise serializers.ValidationError('The object has already been created')
-
         serializer.save()
-
-        obj, created = RatingProductStar.objects.update_or_create(product=product, star=star)
-        obj.count += 1
-        obj.save()
-
-        queryset = RatingProductStar.objects.filter(product=product)
-        rating = get_rating_product(queryset)
-        obj = Product.objects.get(pk=product.pk)
-        obj.rating = rating
-        obj.save()
+        increment_counter_rating_product_star(product=product, star=star)
+        save_rating_product(product=product)

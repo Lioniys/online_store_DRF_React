@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .services import increment_counter_rating_product_star, save_rating_product
@@ -21,6 +22,7 @@ from .serializers import (
     BasketAddSerializer,
     BasketDetailSerializer,
     BasketListSerializer,
+    UserSerializer,
 )
 
 
@@ -98,3 +100,9 @@ class RatingCreateView(generics.CreateAPIView):
         serializer.save()
         increment_counter_rating_product_star(product=product, star=star)
         save_rating_product(product=product)
+
+
+class CreateUserView(generics.CreateAPIView):
+    model = get_user_model()
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer

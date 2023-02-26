@@ -1,5 +1,7 @@
 /.idea
 /.env
+/.env.prod
+/.env.prod.db
 /venv
 /src/db.sqlite3
 /src/media

@@ -4,6 +4,8 @@ from django.conf import settings
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
+    title = models.CharField(max_length=250)
+    description = models.TextField(max_length=5000)
     price = models.PositiveIntegerField(default=0)
     in_store = models.BooleanField(default=True)
     img = models.ImageField(upload_to='img/%Y/%m/%d/', null=True, blank=True)
@@ -27,18 +29,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f'user - {self.user} product - {self.product}'
-
-    class Meta:
-        ordering = ['id']
-
-
-class ProductInfo(models.Model):
-    title = models.CharField(max_length=250)
-    description = models.TextField(max_length=5000)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_info')
-
-    def __str__(self):
-        return self.title
 
     class Meta:
         ordering = ['id']
@@ -79,7 +69,7 @@ class RatingUserProduct(models.Model):
 
 
 class Basket(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="basket")
 
     def __str__(self):
         return f'user - {self.user}'

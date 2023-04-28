@@ -3,7 +3,6 @@ from .models import (
     Product,
     Category,
     Brand,
-    ProductInfo,
     RatingStar,
     RatingUserProduct,
     RatingProductStar,
@@ -15,7 +14,6 @@ from .models import (
 admin.site.register(Product)
 admin.site.register(Category)
 admin.site.register(Brand)
-admin.site.register(ProductInfo)
 admin.site.register(RatingStar)
 admin.site.register(RatingProductStar)
 admin.site.register(Basket)

@@ -1,5 +1,5 @@
 # DRF_online_store
-http://ec2-3-124-171-195.eu-central-1.compute.amazonaws.com/api/v1/
+
 <details><summary>🏗 Deploy :</summary>
 Prod
 
@@ -23,7 +23,5 @@ docker-compose exec web python src/manage.py createsuperuser --noinput
 
 </details>
 
-## Схема базы данных
 ![Image alt](https://github.com/Lioniys/DRF_online_store/raw/main/yreadme/online_store_db.png)
-## swagger
 ![Image alt](https://github.com/Lioniys/DRF_online_store/raw/main/yreadme/swagger.png)

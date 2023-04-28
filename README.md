@@ -23,5 +23,5 @@ docker-compose exec web python src/manage.py createsuperuser --noinput
 
 </details>
 
-![Image alt](https://github.com/Lioniys/DRF_online_store/raw/main/yreadme/online_store_db.png)
+![Image alt](https://github.com/Lioniys/DRF_online_store/raw/main/screenshots/online_store_db.png)
 ![Image alt](https://github.com/Lioniys/DRF_online_store/raw/main/yreadme/swagger.png)

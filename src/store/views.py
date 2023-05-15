@@ -2,10 +2,12 @@ from rest_framework import generics, filters, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from .services import add_product_in_basket, add_rating
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from .models import Product, Review, Basket, BasketProduct
+from .models import Product, Review, Basket, BasketProduct, RatingUserProduct
 from .serializers import (
     ProductsListSerializer,
     ProductsDetailSerializer,
@@ -18,7 +20,7 @@ from .serializers import (
 )
 
 
-class ProductsListView(generics.ListCreateAPIView):  # todo кеш
+class ProductsListView(generics.ListCreateAPIView):
     queryset = Product.objects.filter(in_store=True)
     serializer_class = ProductsListSerializer
     permission_classes = (IsAdminOrReadOnly,)
@@ -26,6 +28,16 @@ class ProductsListView(generics.ListCreateAPIView):  # todo кеш
     filterset_fields = ['category', 'brand']
     search_fields = ['name']
     ordering_fields = ['price']
+
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ProductsDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -88,6 +100,7 @@ class BasketDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class RatingCreateView(generics.CreateAPIView):
+    queryset = RatingUserProduct.objects.all()
     serializer_class = RatingCreateSerializer
     permission_classes = (IsAuthenticated,)
 

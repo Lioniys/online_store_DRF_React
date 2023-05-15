@@ -57,6 +57,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'online_store.wsgi.application'
 
 
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': f'redis://{os.environ.get("REDIS_HOST")}:{os.environ.get("REDIS_PORT")}',
+#     }
+# }
+#
+#
 # DATABASES = {
 #     "default": {
 #         "ENGINE": os.environ.get("SQL_ENGINE"),

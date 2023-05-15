@@ -103,6 +103,7 @@ class BasketSerializer(serializers.ModelSerializer):
 
 
 class RatingCreateSerializer(serializers.ModelSerializer):
+    star = serializers.ChoiceField([1, 2, 3, 4, 5])
 
     class Meta:
         model = RatingUserProduct

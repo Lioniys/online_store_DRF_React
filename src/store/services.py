@@ -24,7 +24,7 @@ def _get_rating_product(*, queryset):
     count_all = 0
     count_star = 0
     for obj in queryset:
-        count_star += obj.count * obj.star.value
+        count_star += obj.count * obj.star
         count_all += obj.count
     return count_star/count_all
 
@@ -48,6 +48,6 @@ def add_rating(*, user, validated_data):
     product = validated_data.get('product')
     star = validated_data.get('star')
     _check_user_is_add_rating(user=user, product=product)
-    RatingUserProduct.objects.create(user=user, **validated_data)
+    RatingUserProduct.objects.create(user=user, product=product)
     _increment_counter_rating_product_star(product=product, star=star)
     _save_rating_product(product=product)

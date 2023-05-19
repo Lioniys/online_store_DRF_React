@@ -52,13 +52,13 @@ class PhotoSerializer(serializers.ModelSerializer):
 class DiscountListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DiscountProduct
-        exclude = ['description', 'start_date', 'is_active', 'products']
+        exclude = ['description', 'start_datetime', 'is_active', 'products']
 
 
 class DiscountDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DiscountProduct
-        exclude = ['start_date', 'is_active', 'products']
+        exclude = ['start_datetime', 'is_active', 'products']
 
 
 class ProductsListSerializer(serializers.ModelSerializer):

@@ -4,8 +4,8 @@ from django.conf import settings
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
-    title = models.CharField(max_length=250)
-    description = models.TextField(max_length=5000)
+    title = models.CharField(max_length=250, blank=True)
+    description = models.TextField(max_length=5000, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     in_store = models.BooleanField(default=True)
     img = models.ImageField(upload_to='img/%Y/%m/%d/', null=True, blank=True)
@@ -22,11 +22,11 @@ class Product(models.Model):
 
 class DiscountProduct(models.Model):
     title = models.CharField(max_length=50)
-    description = models.TextField(max_length=5000)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    description = models.TextField(max_length=5000, blank=True)
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
     is_active = models.BooleanField(default=False)
-    percentage_discount = models.DecimalField(max_digits=2, decimal_places=1)
+    percentage_discount = models.DecimalField(max_digits=3, decimal_places=2)
     products = models.ManyToManyField(Product, related_name="discounts")
 
     def __str__(self):

@@ -1,12 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import (
-    Product,
-    Review,
-    RatingUserProduct,
-    BasketProduct,
-    Photo,
-)
+from . import models
 
 
 class RecursiveSerializer(serializers.Serializer):
@@ -27,7 +21,7 @@ class ReviewListInProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         list_serializer_class = FilterReviewParentSerializer
-        model = Review
+        model = models.Review
         exclude = ['product']
 
 
@@ -35,30 +29,44 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
-        model = Review
+        model = models.Review
         fields = '__all__'
 
 
 class ReviewDetailSerializer(serializers.ModelSerializer):
     user = serializers.CharField(read_only=True)
-    children = RecursiveSerializer(many=True)
+    children = RecursiveSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Review
-        fields = '__all__'
+        model = models.Review
+        exclude = ['product']
 
 
 class PhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Photo
+        model = models.Photo
         exclude = ['product']
 
 
-class ProductsListSerializer(serializers.ModelSerializer):
+class DiscountListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        exclude = ['category', 'brand']
+        model = models.DiscountProduct
+        exclude = ['description', 'start_date', 'is_active', 'products']
+
+
+class DiscountDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DiscountProduct
+        exclude = ['start_date', 'is_active', 'products']
+
+
+class ProductsListSerializer(serializers.ModelSerializer):
+    discounts = DiscountListSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = models.Product
+        exclude = ['category', 'brand', 'in_store']
 
 
 class ProductsDetailSerializer(serializers.ModelSerializer):
@@ -66,16 +74,18 @@ class ProductsDetailSerializer(serializers.ModelSerializer):
     brand = serializers.CharField(read_only=True)
     review = ReviewListInProductSerializer(many=True)
     photo = PhotoSerializer(many=True)
+    discounts = DiscountDetailSerializer(read_only=True, many=True)
 
     class Meta:
-        model = Product
+        model = models.Product
         fields = '__all__'
 
 
 class ProductsInBasketSerializer(serializers.ModelSerializer):
+    discounts = DiscountListSerializer(read_only=True, many=True)
 
     class Meta:
-        model = Product
+        model = models.Product
         exclude = ['category', 'brand', 'rating', 'in_store', 'description']
 
 
@@ -91,14 +101,14 @@ class BasketDetailSerializer(serializers.ModelSerializer):
     product = ProductsInBasketSerializer(read_only=True)
 
     class Meta:
-        model = BasketProduct
+        model = models.BasketProduct
         exclude = ['basket']
 
 
 class BasketSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = BasketProduct
+        model = models.BasketProduct
         exclude = ['basket']
 
 
@@ -106,5 +116,17 @@ class RatingCreateSerializer(serializers.ModelSerializer):
     star = serializers.ChoiceField([1, 2, 3, 4, 5])
 
     class Meta:
-        model = RatingUserProduct
+        model = models.RatingUserProduct
         exclude = ['user']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = '__all__'
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Brand
+        fields = '__all__'

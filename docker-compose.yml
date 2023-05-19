@@ -22,6 +22,7 @@ services:
     depends_on:
       - db
       - cache
+    restart: always
 
   db:
     image: postgres:12.0-alpine
@@ -29,13 +30,45 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
+    restart: always
 
   cache:
     container_name: cache
     image: redis:7.0-alpine
-    restart: always
     volumes:
       - cache:/data
+    restart: always
+
+  celery_broker:
+    container_name: celery_broker
+    image: redis:7.0-alpine
+    restart: always
+
+  celery_beat:
+    container_name: celery_beat
+    build: .
+    command: ['celery', '--workdir=./src', '-A', 'online_store', 'beat', '-l', 'DEBUG']
+    depends_on:
+      - celery_broker
+    restart: always
+
+  flower:
+    container_name: flower
+    build: .
+    command: ['celery', '--workdir=./src', '-A', 'online_store', 'flower']
+    ports:
+      - "5555:5555"
+    depends_on:
+      - celery_broker
+    restart: always
+
+  worker:
+    container_name: worker
+    build: .
+    command: ['celery', '--workdir=./src', '-A', 'online_store', 'worker', '-l', 'INFO']
+    depends_on:
+      - celery_broker
+    restart: always
 
 volumes:
 #  static_volume:

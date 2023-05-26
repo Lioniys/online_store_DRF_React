@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from . import permissions, serializers, services, models
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class ProductsListView(generics.ListCreateAPIView):
@@ -17,7 +18,7 @@ class ProductsListView(generics.ListCreateAPIView):
     search_fields = ['name']
     ordering_fields = ['price']
 
-    @method_decorator(cache_page(60 * 15))
+    # @method_decorator(cache_page(60 * 15))
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
@@ -53,9 +54,13 @@ class CreateUserView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         user = get_user_model().objects.create_user(**serializer.validated_data)
+        refresh = RefreshToken.for_user(user)
         models.Basket.objects.create(user=user)
-        return Response({"user": user.id}, status=status.HTTP_201_CREATED)
+
+        return Response({"refresh": str(refresh), "access": str(refresh.access_token)},
+                        status=status.HTTP_201_CREATED)
 
 
 class BasketListCreateView(generics.ListCreateAPIView):

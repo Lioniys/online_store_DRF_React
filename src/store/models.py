@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
-    title = models.CharField(max_length=250, blank=True)
+    title = models.CharField(max_length=500, blank=True)
     description = models.TextField(max_length=5000, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     in_store = models.BooleanField(default=True)

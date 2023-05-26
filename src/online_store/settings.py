@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 import dotenv
 import os
 
@@ -24,11 +25,15 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'store.apps.StoreConfig',
+    "corsheaders",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -73,24 +78,24 @@ CACHES = {
 }
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("SQL_DATABASE"),
-        "USER": os.environ.get("SQL_USER"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD"),
-        "HOST": os.environ.get("SQL_HOST"),
-        "PORT": os.environ.get("SQL_PORT"),
-    }
-}
-
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     "default": {
+#         "ENGINE": os.environ.get("SQL_ENGINE"),
+#         "NAME": os.environ.get("SQL_DATABASE"),
+#         "USER": os.environ.get("SQL_USER"),
+#         "PASSWORD": os.environ.get("SQL_PASSWORD"),
+#         "HOST": os.environ.get("SQL_HOST"),
+#         "PORT": os.environ.get("SQL_PORT"),
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -133,8 +138,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }

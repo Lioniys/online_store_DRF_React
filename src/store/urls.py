@@ -18,5 +18,6 @@ urlpatterns = [
     path('discount/', views.DiscountListView.as_view()),
     path('token/access/', TokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
+    path("token/verify/", views.verify_view),
     path('docs/', yasg.schema_view.with_ui()),
 ]

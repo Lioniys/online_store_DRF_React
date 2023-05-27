@@ -24,7 +24,9 @@ const AuthModal = observer(({onHide, show}) => {
             } else {
                 if(username && password && email) {
                     const userId = await registration(username, password, email)
-                    console.log(userId)
+                    user.setUser({id: userId})
+                    user.setIsAuth(true)
+                    onHide()
                 }
             }
         } catch (e) {
@@ -39,7 +41,7 @@ const AuthModal = observer(({onHide, show}) => {
                aria-labelledby="contained-modal-title-vcenter">
             <Modal.Body>
                 <h2 className="m-auto text-center">{isLogin ? 'Авторизация' : 'Регистрация'}</h2>
-                <Form className="flex-column d-flex"  validated={true} >
+                <Form className="flex-column d-flex"  validated={true}>
                     {isLogin ? '' :
                         <Form.Control
                             required

@@ -73,7 +73,7 @@ class ProductsDetailSerializer(serializers.ModelSerializer):
     category = serializers.CharField(read_only=True)
     brand = serializers.CharField(read_only=True)
     review = ReviewListInProductSerializer(many=True)
-    photo = PhotoSerializer(many=True)
+    photos = PhotoSerializer(many=True)
     discounts = DiscountDetailSerializer(read_only=True, many=True)
 
     class Meta:

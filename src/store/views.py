@@ -1,6 +1,7 @@
 from rest_framework import generics, filters, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -58,7 +59,7 @@ class CreateUserView(generics.CreateAPIView):
         user = get_user_model().objects.create_user(**serializer.validated_data)
         refresh = RefreshToken.for_user(user)
         models.Basket.objects.create(user=user)
-
+        # todo
         return Response({"refresh": str(refresh), "access": str(refresh.access_token)},
                         status=status.HTTP_201_CREATED)
 
@@ -125,3 +126,9 @@ class BrandListView(generics.ListCreateAPIView):
 class DiscountListView(generics.ListAPIView):
     queryset = models.DiscountProduct.objects.filter(is_active=True)
     serializer_class = serializers.DiscountDetailSerializer
+
+
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated])
+def verify_view(request):
+    return Response(status=200)

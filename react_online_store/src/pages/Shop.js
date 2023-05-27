@@ -7,9 +7,9 @@ import {Context} from "../index";
 import {getBrand, getCategory, getProducts} from "../http/shopAPI";
 
 
-
 const Shop = observer(() => {
     const {shop} = useContext(Context)
+
     useEffect(() => {
         getCategory().then(data => shop.setCategory(data))
         getProducts().then(data => shop.setProducts(data))

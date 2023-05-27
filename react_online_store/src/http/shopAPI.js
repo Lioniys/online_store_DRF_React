@@ -21,7 +21,10 @@ export const getProduct = async (id) => {
     return response.data;
 }
 
-export const createReview = async (product, text) => {
-    await $authHost.post('api/v1/review/', {product, text});
+export const createReview = async (product, text, parent) => {
+    await $authHost.post('api/v1/review/', {product, text, parent});
+}
 
+export const createRating = async (product, star) => {
+    await $authHost.post('api/v1/rating/', {product, star});
 }

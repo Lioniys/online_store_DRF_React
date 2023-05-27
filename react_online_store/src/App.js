@@ -5,15 +5,25 @@ import Navbar from "./components/NavBar"
 import {observer} from "mobx-react-lite";
 import {Context} from "./index";
 import {check} from "./http/userAPI";
+import jwtDecode from "jwt-decode";
+import {Spinner} from "react-bootstrap";
 
 
 const App = observer(() => {
-    const {user} = useContext(Context)
-    const [loading, setLoading] = useState(true)
+    const {user} = useContext(Context);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        check().then()
-    }, [])
+        check().then(data => {
+            user.setIsAuth(data);
+            const userId = jwtDecode(localStorage.getItem('access'))["user_id"];
+            user.setUser({id: userId});
+        }).finally(() => setLoading(false));
+    }, [user]);
+
+    if (loading) {
+        return <Spinner className="position-absolute top-50 start-50"/>
+    }
 
   return (
     <BrowserRouter>

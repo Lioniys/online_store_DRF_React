@@ -1,11 +1,12 @@
 import React from 'react';
 import {Button, Card, Col, Image} from "react-bootstrap";
-import star from "../assets/star.svg"
-import {useNavigate} from "react-router-dom"
+import star from "../assets/star.svg";
+import {useNavigate} from "react-router-dom";
 import {DEVISE_ROUTE} from "../consts";
 
+
 const DeviceItem = ({product}) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     return (
         <Col md={2} className="px-1 pb-1" onClick={() => navigate(DEVISE_ROUTE + '/' + product.id)}>

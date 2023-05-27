@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
-from . import permissions, serializers, services, models
+from . import permissions, serializers, services, models, pagination
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
@@ -115,12 +115,14 @@ class CategoryListView(generics.ListCreateAPIView):
     queryset = models.Category.objects.all()
     serializer_class = serializers.CategorySerializer
     permission_classes = (permissions.IsAdminOrReadOnly,)
+    pagination_class = pagination.CustomPagination
 
 
 class BrandListView(generics.ListCreateAPIView):
     queryset = models.Brand.objects.all()
     serializer_class = serializers.BrandSerializer
     permission_classes = (permissions.IsAdminOrReadOnly,)
+    pagination_class = pagination.CustomPagination
 
 
 class DiscountListView(generics.ListAPIView):

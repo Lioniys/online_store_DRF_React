@@ -11,9 +11,10 @@ export const getBrand = async () => {
     return response.data.results;
 }
 
-export const getProducts = async () => {
-    const response = await $host.get('api/v1/products/');
-    return response.data.results;
+export const getProducts = async (category, brand, page) => {
+    const response = await $host.get('api/v1/products/', {params: {
+        category, brand, page}});
+    return response.data;
 }
 
 export const getProduct = async (id) => {

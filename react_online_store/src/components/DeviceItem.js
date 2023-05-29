@@ -15,12 +15,20 @@ const DeviceItem = ({product}) => {
                 <Card.Body className="p-0 mt-2">
                     <Card.Title className="text-center fs-6">{product.name}</Card.Title>
                     <div className="d-flex justify-content-between align-items-center">
-                        <div>{product.price + '₴'}</div>
+                        <div>{Number(product.price) + '₴'}</div>
                         <div className="d-flex align-items-center">
                             <div>{product.rating}</div>
                             <Image width={18} height={18} src={star}/>
                         </div>
                     </div>
+                    {product.discount_price !== Number(product.price) ?
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div>{product.discount_price + '₴'}</div>
+                            <div className="d-flex align-items-center">
+                                <div>ціна зі знижкою</div>
+                            </div>
+                        </div>
+                        : ''}
                     <Card.Text className="lh-1 mt-2 text-start">
                         {product.description.slice(0, 100)}
                     </Card.Text>

@@ -27,8 +27,6 @@ const ProductPage = observer(() => {
         })
     }, [id, trigger]);
 
-    // todo цена со скидками
-
     return (
         <Container className="mt-3">
             <Alert
@@ -57,12 +55,20 @@ const ProductPage = observer(() => {
                                 <Card.Body>
                                     <Card.Title>
                                         <div className="d-flex justify-content-between align-items-center">
-                                            <div>{product.price + '₴'}</div>
+                                            <div>{Number(product.price) + '₴'}</div>
                                             <div className="d-flex align-items-center">
                                                 <div>{product.rating}</div>
                                                 <Image width={18} height={18} src={star}/>
                                             </div>
                                         </div>
+                                        {product.discount_price !== Number(product.price) ?
+                                            <div className="d-flex justify-content-between align-items-center">
+                                                <div>{product.discount_price + '₴'}</div>
+                                                <div className="d-flex align-items-center">
+                                                    <div>ціна зі знижкою</div>
+                                                </div>
+                                            </div>
+                                            : ''}
                                     </Card.Title>
                                     <Card.Text>{product.title}</Card.Text>
                                     <Card.Text>{product.description}</Card.Text>

@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
+# from django.utils.decorators import method_decorator
+# from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from . import permissions, serializers, services, models, pagination
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -25,8 +25,10 @@ class ProductsListView(generics.ListCreateAPIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
+            services.calculate_additional_product_list_data(serializer=serializer)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
+        services.calculate_additional_product_list_data(serializer=serializer)
         return Response(serializer.data)
 
 

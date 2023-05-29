@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from decimal import Decimal
 from . import models
 
 
@@ -68,3 +69,11 @@ def calculate_additional_basket_data(*, queryset):
         count_all += obj.count
         total_sum += _get_price_obj(obj=obj)
     return count_all, total_sum
+
+
+def calculate_additional_product_list_data(*, serializer):
+    for obj in serializer.data:
+        price = Decimal(obj["price"])
+        _sum = sum(Decimal(discount["percentage_discount"]) for discount in obj["discounts"])
+        discount_price = price - price * _sum
+        obj["discount_price"] = discount_price

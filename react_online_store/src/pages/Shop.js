@@ -1,11 +1,11 @@
 import React, {useContext, useEffect} from 'react';
 import {Col, Container, Row} from "react-bootstrap";
 import TypeBar from "../components/TypeBar";
-import DeviceList from "../components/DeviceList";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import {getBrand, getCategory, getProducts} from "../http/shopAPI";
 import Pages from "../components/Pages";
+import DeviceItem from "../components/DeviceItem";
 
 
 const Shop = observer(() => {
@@ -28,13 +28,15 @@ const Shop = observer(() => {
     },[shop.page, shop.selectedCategory.id, shop]);
 
     return (
-        <Container fluid>
+        <Container>
             <Row className="mt-3">
-                <Col md={2}>
+                <Col  sm={4} md={3} lg={2}>
                     <TypeBar/>
                 </Col>
-                <Col md={10}>
-                    <DeviceList/>
+                <Col  sm={8} md={9} lg={10}>
+                    <Row>
+                        {shop.products.map(product => <DeviceItem key={product.id} product={product}/>)}
+                    </Row>
                     <Pages/>
                 </Col>
             </Row>

@@ -2,12 +2,10 @@ from rest_framework import generics, filters, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth import get_user_model
 # from django.utils.decorators import method_decorator
 # from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from . import permissions, serializers, services, models, pagination
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class ProductsListView(generics.ListCreateAPIView):
@@ -57,13 +55,8 @@ class CreateUserView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        user = get_user_model().objects.create_user(**serializer.validated_data)
-        refresh = RefreshToken.for_user(user)
-        models.Basket.objects.create(user=user)
-        # todo
-        return Response({"refresh": str(refresh), "access": str(refresh.access_token)},
-                        status=status.HTTP_201_CREATED)
+        data = services.create_user(validated_data=serializer.validated_data)
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class BasketListCreateView(generics.ListCreateAPIView):

@@ -1,3 +1,5 @@
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from decimal import Decimal
 from . import models
@@ -77,3 +79,10 @@ def calculate_additional_product_list_data(*, serializer):
         _sum = sum(Decimal(discount["percentage_discount"]) for discount in obj["discounts"])
         discount_price = price - price * _sum
         obj["discount_price"] = discount_price
+
+
+def create_user(*, validated_data):
+    user = get_user_model().objects.create_user(**validated_data)
+    refresh = RefreshToken.for_user(user)
+    models.Basket.objects.create(user=user)
+    return {"refresh": str(refresh), "access": str(refresh.access_token)}

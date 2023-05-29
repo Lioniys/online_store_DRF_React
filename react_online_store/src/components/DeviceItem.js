@@ -9,7 +9,7 @@ const DeviceItem = ({product}) => {
     const navigate = useNavigate();
 
     return (
-        <Col md={2} className="px-1 pb-1" onClick={() => navigate(DEVISE_ROUTE + '/' + product.id)}>
+        <Col sm={6} md={4} lg={3} className="px-1 pb-1" onClick={() => navigate(DEVISE_ROUTE + '/' + product.id)}>
             <Card style={{cursor: "pointer"}} className="h-100 p-2 text-center shadow" >
                 <Card.Img className="rounded" variant="top" src={product.img} />
                 <Card.Body className="p-0 mt-2">
@@ -35,7 +35,7 @@ const DeviceItem = ({product}) => {
                     <Button variant={"outline-primary"} className="w-100" >В кошик</Button>
                 </Card.Body>
             </Card>
-        </Col>
+         </Col>
     );
 };
 

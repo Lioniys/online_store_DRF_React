@@ -1,5 +1,5 @@
-export const BASKET_ROUTE = '/basket'
-export const DEVISE_ROUTE = '/products'
+export const PRODUCT_ROUTE = '/products'
+
 export const SHOP_ROUTE = '/shop'
-export const AUTH_ROUTE = '/auth'
-export const REGISTER_ROUTE = '/register'
+
+export const PAGE_SIZE = 6

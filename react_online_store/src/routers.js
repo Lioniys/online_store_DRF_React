@@ -1,4 +1,4 @@
-import {DEVISE_ROUTE, SHOP_ROUTE} from "./consts";
+import {PRODUCT_ROUTE, SHOP_ROUTE} from "./consts";
 import Shop from "./pages/Shop";
 import ProductPage from "./pages/ProductPage";
 
@@ -9,7 +9,7 @@ export const publicRouters = [
         Component: Shop
     },
     {
-        path: DEVISE_ROUTE + '/:id',
+        path: PRODUCT_ROUTE + '/:id',
         Component: ProductPage
     },
 ]

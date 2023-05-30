@@ -2,17 +2,40 @@ import React from 'react';
 import {Button, Card, Col, Image} from "react-bootstrap";
 import star from "../assets/star.svg";
 import {useNavigate} from "react-router-dom";
-import {DEVISE_ROUTE} from "../consts";
+import {PRODUCT_ROUTE} from "../consts";
+import {addBasket} from "../http/shopAPI";
 
 
-const DeviceItem = ({product}) => {
+const DeviceItem = ({product, setShowAlert, setDataAlert, setTypeAlert}) => {
     const navigate = useNavigate();
 
+    const click = () => {
+        addBasket(product.id).then(() => {
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500);
+        }).catch(() => {
+            setTypeAlert('danger');
+            setDataAlert('Не вдалось додати в кошик');
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500);
+            setTimeout(() => {
+                setTypeAlert('success');
+                setDataAlert('Додано в кошик');
+            }, 1700);
+        });
+    }
+
     return (
-        <Col sm={6} md={4} lg={3} className="px-1 pb-1" onClick={() => navigate(DEVISE_ROUTE + '/' + product.id)}>
-            <Card style={{cursor: "pointer"}} className="h-100 p-2 text-center shadow" >
-                <Card.Img className="rounded" variant="top" src={product.img} />
-                <Card.Body className="p-0 mt-2">
+        <Col sm={6} md={4} lg={3} className="px-1 pb-1" style={{height:450, width:250}}>
+            <Card style={{cursor: "pointer"}} className="h-100 p-2 text-center shadow ">
+                <Card.Img className="" height={330} variant="top" src={product.img}
+                          onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id)}/>
+                <Card.Body className="p-0 mt-2 d-flex flex-column h-100"
+                           onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id)}>
                     <Card.Title className="text-center fs-6">{product.name}</Card.Title>
                     <div className="d-flex justify-content-between align-items-center">
                         <div>{Number(product.price) + '₴'}</div>
@@ -30,10 +53,14 @@ const DeviceItem = ({product}) => {
                         </div>
                         : ''}
                     <Card.Text className="lh-1 mt-2 text-start">
-                        {product.description.slice(0, 100)}
+                        {product.description.slice(0, 140)}
                     </Card.Text>
-                    <Button variant={"outline-primary"} className="w-100" >В кошик</Button>
                 </Card.Body>
+                <Button
+                    variant={"outline-primary"}
+                    className="w-100 mt-auto"
+                    onClick={click}
+                >В кошик</Button>
             </Card>
          </Col>
     );

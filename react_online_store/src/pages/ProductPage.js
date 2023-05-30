@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Button, Card, Carousel, Col, Container, Image, Row, Tab, Tabs} from "react-bootstrap";
 import {useParams} from "react-router-dom";
-import {getProduct} from "../http/shopAPI";
+import {addBasket, getProduct} from "../http/shopAPI";
 import ReviewItem from "../components/ReviewItem";
 import {observer} from "mobx-react-lite";
 import ReviewModal from "../components/ReviewModal";
@@ -26,6 +26,26 @@ const ProductPage = observer(() => {
             setTrigger(false);
         })
     }, [id, trigger]);
+
+    const addInBasket = () => {
+        addBasket(product.id).then(() => {
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500);
+        }).catch(() => {
+            setTypeAlert('danger');
+            setDataAlert('Не вдалось додати в кошик');
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500);
+            setTimeout(() => {
+                setTypeAlert('success');
+                setDataAlert('Додано в кошик');
+            }, 1700);
+        });
+    }
 
     return (
         <Container className="mt-3">
@@ -73,7 +93,11 @@ const ProductPage = observer(() => {
                                     <Card.Text>{product.title}</Card.Text>
                                     <Card.Text>{product.description}</Card.Text>
                                 </Card.Body>
-                                <Button variant="outline-primary" className="mx-3">Додати в кошик</Button>
+                                <Button
+                                    variant="outline-primary"
+                                    className="mx-3"
+                                    onClick={addInBasket}
+                                >Додати в кошик</Button>
                                 <Button
                                     variant="outline-dark"
                                     className="m-3"

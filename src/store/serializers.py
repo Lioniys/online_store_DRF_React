@@ -89,7 +89,13 @@ class ProductsDetailSerializer(serializers.ModelSerializer):
 
 
 class ProductsInBasketSerializer(serializers.ModelSerializer):
-    discounts = DiscountListSerializer(read_only=True, many=True)
+    discount_price = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_discount_price(obj):
+        price = obj.price
+        _sum = sum(discount.percentage_discount for discount in obj.discounts.all())
+        return price - price * _sum
 
     class Meta:
         model = models.Product

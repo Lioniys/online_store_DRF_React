@@ -17,7 +17,7 @@ const ReviewModal = ({setShowReview, setShowAlert, setDataAlert, setTypeAlert, s
                 setTimeout(() => {
                     setShowAlert(false);
                     setTrigger(true);
-                },1000);
+                },1500);
             });
         }
         if (radioValue) {
@@ -28,7 +28,7 @@ const ReviewModal = ({setShowReview, setShowAlert, setDataAlert, setTypeAlert, s
                 setTimeout(() => {
                     setShowAlert(false);
                     setTrigger(true);
-                },1000);
+                },1500);
             }).catch(e => {
                 setTypeAlert('danger');
                 setDataAlert(e.response.data[0]);
@@ -37,11 +37,11 @@ const ReviewModal = ({setShowReview, setShowAlert, setDataAlert, setTypeAlert, s
                 setShowAlert(true);
                 setTimeout(() => {
                     setShowAlert(false);
-                }, 1000);
+                }, 1500);
                 setTimeout(() => {
                     setTypeAlert('success');
                     setDataAlert('Відгук Додано');
-                },1200);
+                },1700);
             });
         }
     };

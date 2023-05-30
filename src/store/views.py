@@ -61,6 +61,7 @@ class CreateUserView(generics.CreateAPIView):
 
 class BasketListCreateView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
+    pagination_class = None
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

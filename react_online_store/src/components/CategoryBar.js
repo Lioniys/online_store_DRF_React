@@ -4,7 +4,7 @@ import {Context} from "../index";
 import {ListGroup} from "react-bootstrap";
 
 
-const TypeBar = observer(() => {
+const CategoryBar = observer(({setSelectedCategory}) => {
     const {shop} = useContext(Context);
 
     return (
@@ -12,11 +12,14 @@ const TypeBar = observer(() => {
             {shop.category.map(category =>
                 <ListGroup.Item
                     className="overflow-auto"
-                    onClick={() => shop.setSelectedCategory(category)}
+                    onClick={() => {
+                        setSelectedCategory(category)
+                        shop.setPage(1)
+                    }}
                     action variant="light" key={category.id}
                 >{category.name}</ListGroup.Item>)}
         </ListGroup>
     );
 });
 
-export default TypeBar;
+export default CategoryBar;

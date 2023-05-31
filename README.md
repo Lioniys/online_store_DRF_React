@@ -4,8 +4,7 @@
 
 <br/>
 
-**[Django REST Framework, React, Bootstrap, PostgreSQL, Python, JavaScript,
-Redis, Celery, Docker Compose, Nginx]**
+**[Django REST Framework, React, Bootstrap, PostgreSQL, Redis, Celery, Docker Compose, Nginx]**
 
  
 Implemented functionality:  

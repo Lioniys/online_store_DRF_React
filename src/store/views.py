@@ -2,8 +2,8 @@ from rest_framework import generics, filters, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view, permission_classes
-# from django.utils.decorators import method_decorator
-# from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.response import Response
 from . import permissions, serializers, services, models, pagination
 
@@ -17,7 +17,7 @@ class ProductsListView(generics.ListCreateAPIView):
     search_fields = ['name']
     ordering_fields = ['price']
 
-    # @method_decorator(cache_page(60 * 15))
+    @method_decorator(cache_page(60 * 15))
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)

@@ -2,18 +2,14 @@
 
 <details><summary> 📄 Description: </summary>
 
-[Django REST Framework, React, Bootstrap, PostgreSQL, Python, JavaScript Redis, Celery, Docker Compose, Git, Nginx]
-REST API online store written using Django REST framework and PostgreSQL database. 
+**[Django REST Framework, React, Bootstrap, PostgreSQL, Python, JavaScript Redis, Celery, Docker Compose, Git, Nginx]**
 
-Implemented functionality: 
-
+REST API online store written using Django REST framework and PostgreSQL database.  
+Implemented functionality:  
 feedback on the product as well as the opportunity to comment on the feedback, 
-shopping cart, differentiation of access rights, product rating system. 
-
-Auto discount activation with celery.
-
-JWT authentication and authorization. 
-
+shopping cart, differentiation of access rights, product rating system.  
+Auto discount activation with celery.  
+JWT authentication and authorization.  
 Deployment is available using Docker Compose.
 
 

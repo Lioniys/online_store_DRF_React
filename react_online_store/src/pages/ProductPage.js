@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Alert, Button, Card, Carousel, Col, Container, Image, Row, Tab, Tabs} from "react-bootstrap";
 import {useParams} from "react-router-dom";
 import {addBasket, getProduct} from "../http/shopAPI";
@@ -7,6 +7,7 @@ import {observer} from "mobx-react-lite";
 import ReviewModal from "../components/ReviewModal";
 import star from "../assets/star.svg";
 import CommentaryModal from "../components/CommentaryModal";
+import {Context} from "../index";
 
 
 const ProductPage = observer(() => {
@@ -18,6 +19,7 @@ const ProductPage = observer(() => {
     const [showCommentary, setShowCommentary] = useState(false);
     const [idCommentary, setIdCommentary] = useState(0);
     const [trigger, setTrigger] = useState(false);
+    const {user} = useContext(Context);
     const {id} = useParams();
 
     useEffect(() => {
@@ -28,23 +30,35 @@ const ProductPage = observer(() => {
     }, [id, trigger]);
 
     const addInBasket = () => {
-        addBasket(product.id).then(() => {
-            setShowAlert(true);
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 1500);
-        }).catch(() => {
-            setTypeAlert('danger');
-            setDataAlert('Не вдалось додати в кошик');
-            setShowAlert(true);
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 1500);
-            setTimeout(() => {
-                setTypeAlert('success');
-                setDataAlert('Додано в кошик');
-            }, 1700);
-        });
+        if (user.isAuth) {
+            addBasket(product.id).then(() => {
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 1500);
+            }).catch(() => {
+                setTypeAlert('danger');
+                setDataAlert('Не вдалось додати в кошик');
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 1500);
+                setTimeout(() => {
+                    setTypeAlert('success');
+                    setDataAlert('Додано в кошик');
+                }, 1700);
+            });
+        } else {
+            user.setShowAuth(true);
+        }
+    }
+
+    const click = () => {
+        if (user.isAuth) {
+            setShowReview(true);
+        } else {
+            user.setShowAuth(true);
+        }
     }
 
     return (
@@ -101,7 +115,7 @@ const ProductPage = observer(() => {
                                 <Button
                                     variant="outline-dark"
                                     className="m-3"
-                                    onClick={() => setShowReview(true)}
+                                    onClick={click}
                                 >Написати Відгук</Button>
                             </Card>
                         </Col>

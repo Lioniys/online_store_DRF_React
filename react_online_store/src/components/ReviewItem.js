@@ -1,17 +1,24 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Card} from "react-bootstrap";
+import {observer} from "mobx-react-lite";
+import {Context} from "../index";
 
 
-const ReviewItem = ({reviews, setShowCommentary, setIdCommentary}) => {
+const ReviewItem = observer(({reviews, setShowCommentary, setIdCommentary}) => {
+    const {user} = useContext(Context);
 
     const click = (review) => {
-        setShowCommentary(true);
-        setIdCommentary(review.id);
+        if (user.isAuth) {
+            setShowCommentary(true);
+            setIdCommentary(review.id);
+        } else {
+            user.setShowAuth(true);
+        }
     };
 
     return (
         <div>
-            {reviews ? reviews.map(review =>
+            {reviews?.map(review =>
                 <Card key={review.id} className="shadow h-100 mt-3">
                     <Card.Header className="d-flex justify-content-between align-items-center">
                         {review.user} - {review.time_create}
@@ -28,9 +35,9 @@ const ReviewItem = ({reviews, setShowCommentary, setIdCommentary}) => {
                         />
                     </Card.Body>
                 </Card>
-            ) : ''}
+            )}
         </div>
     );
-};
+});
 
 export default ReviewItem;

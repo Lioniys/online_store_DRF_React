@@ -6,6 +6,7 @@ export default class UserState {
     constructor() {
         this._isAuth = false
         this._user = {}
+        this._showAuth = false
         makeAutoObservable(this)
     }
 
@@ -14,6 +15,14 @@ export default class UserState {
         this._isAuth = false
         localStorage.removeItem('access')
         localStorage.removeItem('refresh')
+    }
+
+    setShowAuth(bool) {
+        this._showAuth = bool
+    }
+
+    get showAuth() {
+        return this._showAuth
     }
 
     setIsAuth(bool) {

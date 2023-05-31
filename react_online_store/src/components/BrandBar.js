@@ -19,7 +19,7 @@ const BrandBar = observer(({setSelectedBrand, selectedBrand}) => {
 
     return (
         <Row className="d-flex">
-            {shop.brands.map(brand =>
+            {shop.brands?.map(brand =>
                 <Card key={brand.id} style={{cursor: "pointer", width:100}}
                       onClick={() => click(brand)}
                       border={brand.id === selectedBrand.id ? "dark" : "light"}

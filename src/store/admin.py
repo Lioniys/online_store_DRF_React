@@ -9,4 +9,4 @@ admin.site.register(models.Brand)
 admin.site.register(models.Photo)
 admin.site.register(models.Review)
 
-admin.site.register(models.Basket)
+# admin.site.register(models.Basket)

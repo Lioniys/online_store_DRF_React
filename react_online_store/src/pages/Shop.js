@@ -62,7 +62,7 @@ const Shop = observer(() => {
                         selectedBrand={selectedBrand}
                     />
                     <Row>
-                        {shop.products.map(product =>
+                        {shop.products?.map(product =>
                             <DeviceItem
                                 key={product.id}
                                 product={product}

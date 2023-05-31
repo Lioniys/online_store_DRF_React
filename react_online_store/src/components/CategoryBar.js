@@ -9,7 +9,7 @@ const CategoryBar = observer(({setSelectedCategory}) => {
 
     return (
         <ListGroup className="d-flex flex-column overflow-auto">
-            {shop.category.map(category =>
+            {shop.category?.map(category =>
                 <ListGroup.Item
                     className="overflow-auto"
                     onClick={() => {

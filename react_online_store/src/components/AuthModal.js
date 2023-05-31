@@ -5,38 +5,38 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 
 
-const AuthModal = observer(({onHide, show}) => {
-    const {user} = useContext(Context)
-    const [isLogin, setIsLogin] = useState(true)
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [username, setUsername] = useState('')
+const AuthModal = observer(() => {
+    const {user} = useContext(Context);
+    const [isLogin, setIsLogin] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
 
     const singIn = async () => {
         try {
             if (isLogin) {
                 if(username && password) {
-                    const userId = await login(username, password)
-                    user.setUser({id: userId})
-                    user.setIsAuth(true)
-                    onHide()
+                    const userId = await login(username, password);
+                    user.setUser({id: userId});
+                    user.setIsAuth(true);
+                    user.setShowAuth(false);
                 }
             } else {
                 if(username && password && email) {
-                    const userId = await registration(username, password, email)
-                    user.setUser({id: userId})
-                    user.setIsAuth(true)
-                    onHide()
+                    const userId = await registration(username, password, email);
+                    user.setUser({id: userId});
+                    user.setIsAuth(true);
+                    user.setShowAuth(false);
                 }
             }
         } catch (e) {
-            alert(e.response.data.message)
+            alert(e.response.data.message);
         }
     }
 
     return (
-        <Modal onHide={onHide}
-               show={show}
+        <Modal onHide={() => user.setShowAuth(false)}
+               show={user.showAuth}
                centered animation={true}
                aria-labelledby="contained-modal-title-vcenter">
             <Modal.Body>

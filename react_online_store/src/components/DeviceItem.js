@@ -1,32 +1,40 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Card, Col, Image} from "react-bootstrap";
 import star from "../assets/star.svg";
 import {useNavigate} from "react-router-dom";
 import {PRODUCT_ROUTE} from "../consts";
 import {addBasket} from "../http/shopAPI";
+import {Context} from "../index";
+import {observer} from "mobx-react-lite";
 
 
-const DeviceItem = ({product, setShowAlert, setDataAlert, setTypeAlert}) => {
+const DeviceItem = observer((
+    {product, setShowAlert, setDataAlert, setTypeAlert}) => {
     const navigate = useNavigate();
+    const {user} = useContext(Context);
 
     const click = () => {
-        addBasket(product.id).then(() => {
-            setShowAlert(true);
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 1500);
-        }).catch(() => {
-            setTypeAlert('danger');
-            setDataAlert('Не вдалось додати в кошик');
-            setShowAlert(true);
-            setTimeout(() => {
-                setShowAlert(false);
-            }, 1500);
-            setTimeout(() => {
-                setTypeAlert('success');
-                setDataAlert('Додано в кошик');
-            }, 1700);
-        });
+        if (user.isAuth) {
+            addBasket(product.id).then(() => {
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 1500);
+            }).catch(() => {
+                setTypeAlert('danger');
+                setDataAlert('Не вдалось додати в кошик');
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                }, 1500);
+                setTimeout(() => {
+                    setTypeAlert('success');
+                    setDataAlert('Додано в кошик');
+                }, 1700);
+            });
+        } else {
+            user.setShowAuth(true);
+        }
     }
 
     return (
@@ -64,6 +72,6 @@ const DeviceItem = ({product, setShowAlert, setDataAlert, setTypeAlert}) => {
             </Card>
          </Col>
     );
-};
+});
 
 export default DeviceItem;

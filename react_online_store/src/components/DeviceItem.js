@@ -40,7 +40,7 @@ const DeviceItem = observer((
     return (
         <Col sm={6} md={4} lg={3} className="px-1 pb-1" style={{height:450, width:250}}>
             <Card style={{cursor: "pointer"}} className="h-100 p-2 text-center shadow ">
-                <Card.Img className="" height={330} variant="top" src={product.img}
+                <Card.Img height={300} width={240} variant="top" src={product.img}
                           onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id)}/>
                 <Card.Body className="p-0 mt-2 d-flex flex-column h-100"
                            onClick={() => navigate(PRODUCT_ROUTE + '/' + product.id)}>

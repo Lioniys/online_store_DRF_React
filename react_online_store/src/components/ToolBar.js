@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Button, Dropdown, Form, Row, Stack} from "react-bootstrap";
+import {Dropdown, Form, Row, Stack} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 
@@ -16,7 +16,6 @@ const ToolBar = observer((
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
-                <Button variant="secondary">Пошук</Button>
             </Stack>
             <Stack direction="horizontal" gap={2} className="mb-3 w-25">
                 <Dropdown>
